@@ -79,7 +79,26 @@ def obtener_reserva_por_id(id_reserva):
 def crear_reserva(reserva):
     with engine.connect() as conn:
 
-        # Validar que la reserva esté dentro del horario
+        # Validar que existe el usuario
+        # Se busca en la tabla usuarios si existe el id de usuario
+        
+        usuario_existe = conn.execute(
+            text("""
+                SELECT COUNT(*)
+                FROM Usuarios
+                WHERE IdUsuario = :id_usuario
+            """),
+            {
+                "id_usuario": reserva.id_usuario
+            }
+        ).scalar()
+
+        if usuario_existe == 0:
+            return {
+                "error": "El usuario no existe"
+            }
+
+        # Validar que la reserva este dentro del horario
         # Rango horario: 10:00 a 21:00
 
         if reserva.hora_inicio < time(10, 0):
