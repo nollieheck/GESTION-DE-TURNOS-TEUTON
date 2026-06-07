@@ -3,7 +3,8 @@ from schemas.reserva_schema import ReservaCrear
 from repositorios.reservas_repositorio import (
     obtener_todas_las_reservas,
     obtener_reserva_por_id,
-    crear_reserva
+    crear_reserva,
+    obtener_disponibilidad
 )
 
 router = APIRouter()
@@ -22,7 +23,12 @@ def obtener_reserva(id_reserva: int):
 
     return reserva
 
+
 @router.post("/reservas")
 def crear_nueva_reserva(reserva: ReservaCrear):
     return crear_reserva(reserva)
 
+
+@router.get("/disponibilidad")
+def disponibilidad(fecha: str, id_pista: int):
+    return obtener_disponibilidad(fecha, id_pista)

@@ -211,3 +211,39 @@ def crear_reserva(reserva):
             "mensaje": "Reserva creada correctamente"
         }
 
+def obtener_disponibilidad(fecha, id_pista):
+
+    with engine.connect() as conn:
+
+        result = conn.execute(
+            text("""
+                SELECT HoraInicio
+                FROM Reservas
+                WHERE Fecha = :fecha
+                AND IdPista = :id_pista
+            """),
+            {
+                "fecha": fecha,
+                "id_pista": id_pista
+            }
+        )
+
+        horas_ocupadas = []
+
+        for fila in result:
+            horas_ocupadas.append(
+                fila.HoraInicio.strftime("%H:%M")
+            )
+
+        disponibilidad = []
+
+        for hora in range(10, 21):
+
+            horario = f"{hora:02d}:00"
+
+            disponibilidad.append({
+                "hora": horario,
+                "disponible": horario not in horas_ocupadas
+            })
+
+        return disponibilidad
