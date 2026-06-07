@@ -98,6 +98,25 @@ def crear_reserva(reserva):
                 "error": "El usuario no existe"
             }
 
+        # Validar que existe la pista
+        # Se busca en la tabla pistas si existe el id de pista
+        
+        pista_existe = conn.execute(
+            text("""
+                SELECT COUNT(*)
+                FROM Pistas
+                WHERE IdPista = :id_pista
+            """),
+            {
+                "id_pista": reserva.id_pista
+            }
+        ).scalar()
+
+        if pista_existe == 0:
+            return {
+                "error": "La pista no existe"
+            }
+
         # Validar que la reserva este dentro del horario
         # Rango horario: 10:00 a 21:00
 
