@@ -10,6 +10,7 @@ from repositorios.reservas_repositorio import obtener_todas_las_reservas
 
 from routers.usuarios_router import router as usuarios_router
 from routers.reservas_router import router as reservas_router
+from routers.pistas_router import router as pistas_router
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -27,6 +28,7 @@ app.add_middleware(
 
 app.include_router(usuarios_router)
 app.include_router(reservas_router)
+app.include_router(pistas_router)
 
 @app.get("/")
 def inicio():
